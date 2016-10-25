@@ -1,9 +1,21 @@
 <?php
-
+/**
+ * Exception handling
+ *
+ * @package Aivo
+ * @author  Matias Pino <mpino@aivo.co>
+ * @version 1.0.0
+ */
 namespace Aivo;
 
 use \Psr\Log\LoggerInterface;
 
+/**
+ * Abstract class BaseException
+ *
+ * @package Aivo
+ * @author  Matias Pino <mpino@aivo.co>
+ */
 abstract class BaseException extends \Exception implements
     \Psr\Log\LoggerAwareInterface,
     \JsonSerializable
@@ -84,17 +96,17 @@ abstract class BaseException extends \Exception implements
     protected $previous = null;
 
     /**
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Exception|\Throwable    $previous
-     * @param string                   $previousLevel
+     * @param LoggerInterface       $logger        PSR-3 compliant Logger
+     * @param \Exception|\Throwable $previous      A previous exception
+     * @param string                $previousLevel Level to log previous exception
      *
      * @return \Aivo\BaseException
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger = null,
         $previous = null,
-        $previousLevel = null)
-    {
+        $previousLevel = null
+    ) {
         $this->setLogger($logger);
         $this->setPrevious($previous);
 
@@ -110,24 +122,24 @@ abstract class BaseException extends \Exception implements
     /**
      * Tries to call the PSR-3
      *
-     * @param string $message
+     * @param string $message Message to log
      * @param string $level   PSR-3 valid level
+     * @param array  $data    Any data such as debug_backtrace()
+     *
+     * @return void
      */
     public function log($message, $level, $data = [])
     {
         if (!empty($this->logger)) {
             $level = strtolower($level);
-
-//            if (empty($data)) {
-                $this->logger->$level($message, $data);
-//            } else {
-//                $this->logger->$level($message);
-//            }
+            $this->logger->$level($message, $data);
         }
     }
 
     /**
      * Calls to $this->log using this instance's values
+     *
+     * @return void
      */
     public function logThis()
     {
@@ -137,7 +149,7 @@ abstract class BaseException extends \Exception implements
     // Message
 
     /**
-     * @param string $message
+     * @param string $message Message to display and log
      *
      * @return BaseException
      */
@@ -151,7 +163,9 @@ abstract class BaseException extends \Exception implements
     // Code
 
     /**
-     * @param int $code
+     * Sets the internal error code
+     *
+     * @param int $code Internal error code
      *
      * @return BaseException
      */
@@ -165,6 +179,8 @@ abstract class BaseException extends \Exception implements
     // Class
 
     /**
+     * Gets the class name
+     *
      * @return string
      */
     public function getClass()
@@ -177,7 +193,7 @@ abstract class BaseException extends \Exception implements
     }
 
     /**
-     * @param int $code
+     * @param string $class Class name
      *
      * @return BaseException
      */
@@ -199,7 +215,7 @@ abstract class BaseException extends \Exception implements
     }
 
     /**
-     * @param int $code
+     * @param string $level PSR-3 valid level
      *
      * @return BaseException
      */
@@ -221,7 +237,7 @@ abstract class BaseException extends \Exception implements
     }
 
     /**
-     * @param int $httpCode
+     * @param int $httpCode Http code to return
      *
      * @return BaseException
      */
@@ -243,7 +259,7 @@ abstract class BaseException extends \Exception implements
     }
 
     /**
-     * @param array|object $data
+     * @param array|object $data Any data such as debug_backtrace()
      *
      * @return BaseException
      */
@@ -267,7 +283,7 @@ abstract class BaseException extends \Exception implements
     /**
      * Sets a logger instance on the object
      *
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Psr\Log\LoggerInterface $logger PSR-3 compliant Logger
      *
      * @return BaseException
      */
@@ -279,7 +295,7 @@ abstract class BaseException extends \Exception implements
     }
 
     /**
-     * @param Exception $code
+     * @param \Throwable|\Exception $e
      *
      * @return BaseException
      */
@@ -292,7 +308,7 @@ abstract class BaseException extends \Exception implements
         return $this;
     }
 
-    public function __toArray()
+    public function toArray()
     {
         $return = [
             'message' => $this->getMessage(),
@@ -308,6 +324,6 @@ abstract class BaseException extends \Exception implements
 
     public function jsonSerialize()
     {
-        return $this->__toArray();
+        return $this->toArray();
     }
 }

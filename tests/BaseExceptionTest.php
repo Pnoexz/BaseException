@@ -245,7 +245,7 @@ class BaseExceptionTest extends \PHPUnit_Framework_TestCase
             'class' => 'DatabaseException'
         ];
 
-        $this->assertEquals($expected, $e->__toArray());
+        $this->assertEquals($expected, $e->toArray());
     }
 
     public function test_to_array_with_data()
@@ -269,7 +269,7 @@ class BaseExceptionTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $this->assertEquals($expected, $e->__toArray());
+        $this->assertEquals($expected, $e->toArray());
 
     }
 
