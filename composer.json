@@ -1,0 +1,25 @@
+{
+    "name": "aivo/exceptions",
+    "description": "Exceptions",
+    "license": "propietary",
+    "authors": [
+        {
+            "name": "Matias Pino",
+            "email": "mpino@aivo.co"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "psr/log": "^1.0"
+    },
+    "config": {
+        "framework": {
+            "php": ">=5.5.9"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Aivo\\": "src"
+        }
+    }
+}
